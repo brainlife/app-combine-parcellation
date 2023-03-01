@@ -1,18 +1,20 @@
 #!/bin/bash
+#PBS -l nodes=1:ppn=1
+#PBS -l vmem=14gb
+#PBS -l walltime=0:30:00
+#PBS -N app-combine-parcellation
+#PBS -V
 
-#SBATCH --job-name=template
-#SBATCH --ntasks-per-node=1
-#SBATCH --mem=1G
-#SBATCH --time=00:15:00
+set -x
+set -e
 
-# Copyright (c) 2020 brainlife.io at University of Texas at Austin and Indiana University
-# 
-# This is the main file run by the brainlife.io orchestration system
-#
-# Author: Franco Pestilli
+echo "combining parcellations"
+singularity exec docker://brainlife/dipy:1.4.1 ./combine_parcellations.py
 
-# make output directory
-mkdir -p out_dir
-
-# run the actual python code
-singularity exec docker://brainlife/dipy:1.1.1 python3 main.py
+if [ ! -f parcellation/parc.nii.gz ]; then
+	echo "something went wrong. check logs and derivatives"
+	exit 1
+else
+	echo "complete"
+	exit 0
+fi
