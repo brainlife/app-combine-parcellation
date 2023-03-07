@@ -47,7 +47,7 @@ def main():
 
 	# parse inputs
 	#parc_one = config['parc_one']
-    parc_one = './parc_one.nii.gz'
+	parc_one = './parc_one.nii.gz'
 	parc_two = config['parc_two']
 	label_one = config['label_one']
 	label_two = config['label_two']
@@ -83,7 +83,7 @@ def main():
 
 	# combine parcellations
 	parcellations_data = combine_parcellation(parc_one_data,parc_two_data,total_parcels)
-	
+
 	# save parcellations
 	output_parcellation = nib.Nifti1Image(parcellations_data,parc_one.affine,parc_one.header)
 	nib.save(output_parcellation,'./parcellation/parc.nii.gz')
