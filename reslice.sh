@@ -2,6 +2,8 @@
 
 set -x
 
+export SUBJECTS_DIR=./
+
 parc_one=`jq -r '.parc_one' config.json`
 parc_two=`jq -r '.parc_two' config.json`
 
