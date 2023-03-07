@@ -46,9 +46,9 @@ def main():
 		config = json.load(config_f)
 
 	# parse inputs
-	#parc_one = config['parc_one']
-	parc_one = './parc_one.nii.gz'
-	parc_two = config['parc_two']
+	parc_one = config['parc_one']
+	#parc_two = config['parc_two']
+	parc_two = './parc_two.nii.gz'
 	label_one = config['label_one']
 	label_two = config['label_two']
 
