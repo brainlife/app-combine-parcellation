@@ -18,12 +18,18 @@ def update_parcellation_data(parc_data,label_data,start_value):
 
 	return parc_data
 
-def combine_parcellation(parc_data_one, parc_data_two,total_parcels):
+def combine_parcellation(parc_data_one, parc_data_two,overlap_type):
 
 	parcellation = parc_data_one + parc_data_two
 
-	# remove voxels if they are greater than the total parcels, as this indicates overlapping voxels
-	parcellation[parcellation > total_parcels] = 0
+	mask = (parc_data_one>0).astype(np.int_) & (parc_data_two>0).astype(np.int_)
+
+	if overlap_type == 'first':
+		parcellation[mask>0] = parc_data_one[mask>0]
+	elif overlap_type == 'second':
+		parcellation[mask>0] = parc_data_two[mask>0]
+	else:
+		parcellation[mask>0] = 0
 
 	return parcellation
 
@@ -51,6 +57,7 @@ def main():
 	parc_two = './parc_two.nii.gz'
 	label_one = config['label_one']
 	label_two = config['label_two']
+	overlap_type = config['overlap']
 
 	# make output directory
 	if not os.path.isdir('./parcellation'):
@@ -75,14 +82,12 @@ def main():
 	label_one_refined = extract_labels(unique_labels[0],label_one)
 	label_two_refined = extract_labels(unique_labels[1],label_two)
 
-
 	# update parcellation with new labels
 	parc_one_data = update_parcellation_data(parc_one_data,label_one_refined,1)
 	parc_two_data = update_parcellation_data(parc_two_data,label_two_refined,len(np.unique(parc_one_data[parc_one_data>0]))+1)
-	total_parcels = len(np.unique(parc_one_data[parc_one_data>0])) + len(np.unique(parc_two_data[parc_two_data>0]))
 
 	# combine parcellations
-	parcellations_data = combine_parcellation(parc_one_data,parc_two_data,total_parcels)
+	parcellations_data = combine_parcellation(parc_one_data,parc_two_data,overlap_type)
 
 	# save parcellations
 	output_parcellation = nib.Nifti1Image(parcellations_data,parc_one.affine,parc_one.header)
