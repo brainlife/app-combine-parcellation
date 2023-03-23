@@ -30,6 +30,8 @@ def combine_parcellation(parc_data_one, parc_data_two,overlap_type):
 		parcellation[mask>0] = parc_data_two[mask>0]
 	else:
 		parcellation[mask>0] = 0
+	
+	parcellation[parcellation>0] = parcellation[parcellation>0].astype(np.int_)
 
 	return parcellation
 
