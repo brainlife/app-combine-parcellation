@@ -30,9 +30,7 @@ def combine_parcellation(parc_data_one, parc_data_two,overlap_type):
 		parcellation[mask>0] = parc_data_two[mask>0]
 	else:
 		parcellation[mask>0] = 0
-	
-	parcellation[parcellation>0] = [ str(f) for f in parcellation[parcellation>0] ]
-		
+			
 	return parcellation
 
 def extract_labels(unique_labels,labels):
@@ -92,7 +90,7 @@ def main():
 	parcellations_data = combine_parcellation(parc_one_data,parc_two_data,overlap_type)
 
 	# save parcellations
-	output_parcellation = nib.Nifti1Image(parcellations_data,parc_one.affine,parc_one.header)
+	output_parcellation = nib.Nifti1Image(parcellations_data.astype(int),parc_one.affine,parc_one.header)
 	nib.save(output_parcellation,'./parcellation/parc.nii.gz')
 
 	# update the labels so they range from 0 to N where len is total length of combined unique labels
