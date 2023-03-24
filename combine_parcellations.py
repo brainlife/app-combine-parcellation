@@ -31,8 +31,10 @@ def combine_parcellation(parc_data_one, parc_data_two,overlap_type):
 	else:
 		parcellation[mask>0] = 0
 	
-	parcellation[parcellation>0] = parcellation[parcellation>0].astype(np.int_)
-
+	#parcellation[parcellation>0] = parcellation[parcellation>0].astype(np.int_)
+	
+	parcellation[parcellation>0] = [ str(f) for f in parcellation[parcellation>0] ] 
+	
 	return parcellation
 
 def extract_labels(unique_labels,labels):
