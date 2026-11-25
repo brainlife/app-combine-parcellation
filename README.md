@@ -2,6 +2,32 @@
 [![Run on Brainlife.io](https://img.shields.io/badge/Brainlife-bl.app.444-blue.svg)](https://doi.org/10.25663/bl.app.444)
 
 # app-template-python
+
+<!-- brainlife-app:begin (generated from the App manifest; edit the manifest, not this block) -->
+
+**Merges two volumetric parcellations into one with relabelled consecutive values and a combined label.json, resolving overlaps in favour of the first, the second or neither.**
+
+Reslices the second parcellation onto the first's grid with FreeSurfer mri_vol2vol (header-based, nearest neighbour), renumbers the labels of both, sums them and handles overlapping voxels according to the overlap option, then writes parc.nii.gz and label.json. Use it to combine, for example, a cortical and a subcortical atlas. Both parcellations must already be aligned to the same subject space.
+
+Run it on brainlife.io: [https://doi.org/10.25663/brainlife.app.739](https://doi.org/10.25663/brainlife.app.739)
+
+| Input | Datatype | Required | Description |
+|---|---|---|---|
+| `parc_one` | `neuro/parcellation/volume` | yes | First volumetric parcellation with its label.json; defines the output grid. |
+| `parc_two` | `neuro/parcellation/volume` | yes | Second volumetric parcellation with its label.json. Must be aligned with the first; it is resampled by header only. |
+
+| Output | Datatype | Description |
+|---|---|---|
+| `parcellation` | `neuro/parcellation/volume` | Combined parcellation (parc.nii.gz) with a merged label.json. |
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `overlap` | enum | `first` | How voxels labelled in both parcellations are resolved: keep the first's label, the second's, or set them to 0. Options: `first`, `second`, `remove`. |
+
+Runtime: container `brainlife/freesurfer:7.3.2`; 1 CPUs; needs `FREESURFER_LICENSE`.
+
+<!-- brainlife-app:end -->
+
 This is a template showing how to develop a python-based brainlife.io/app
 
 # app-example-documentation
